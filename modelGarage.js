@@ -14,6 +14,10 @@ const garageSchema  = new Schema({
     type: ObjectId,
     ref: 'Car'
   },
+  carCount: {
+    type: Number,
+    default: 0
+  },
   bikes: [
     {
     type: ObjectId,
