@@ -40,7 +40,9 @@ app.js ---> starting point, location of express server
 mongooseConfig.js ---> four lines to make Mongoose kill cobras.
 
 modelGarage.js ---> the top level schema
+
 modelCar.js ---> the single nested schema
+
 modelBike.js ---> the array nested schema
 
 
