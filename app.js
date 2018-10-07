@@ -20,7 +20,7 @@ app.post('/garage', (req, res) => {
      .then((doc) => {
        res.send(doc);
      }, (e) => {
-      console.error('Unable to save garage');
+      console.error('Unable to save new garage');
       res.status(400).send();
      })
 });
@@ -40,25 +40,25 @@ app.get('/garage/:id', (req, res) => {
       res.send({doc});
     })
     .catch((e) => {
-      console.error('---------------------> Unable to find garage');
+      console.log('Unable to find by ID garage.');
       res.status(404).send();
     });
 });
 
 
-app.patch('/garage/:id', (req, res) => {
-  let id = req.params.id;
+// this route adds a car to the garage, and removes any previously added car
+
+app.patch('/car/:garageId', (req, res) => {
+  let id = req.params.garageId;
   let color = req.body.color;
   let owner = new ObjectID(id);
-  
   let car = new Car({color: color, owner: owner});
-  
   
   Garage.findByIdAndUpdate(id, {$set: {car: car}}, {new: true})
     .then((doc) => {
       if (!doc) {
-        console.log('---------------------> find by id and update failed');
-        res.status(400).send();
+        console.log('Unable to find by ID and update garage.');
+        return res.status(400).send();
       }
       
       if(doc.car !== null) {
@@ -72,24 +72,33 @@ app.patch('/garage/:id', (req, res) => {
           res.send(doc);
         })
         .catch((e) => {
-          console.log('Unable to add car to garage');
+          console.log('Unable to add car to garage.');
         });
-      
     })
-  
-  
-  
-  
 });
 
+// Adds a bike to the db, increments bikeCount in the owner's garage
+app.patch('/bike/:garageId', (req, res) => {
+  let id = req.params.garageId;
+  let owner = new ObjectID(id);
+  let color = req.body.color;
+  let bike = new Bike({color: color, owner: owner});
 
-
-
-
-
-
-
-
+  Garage.findByIdAndUpdate(id, {$inc: {bikeCount: 1}}, {new: true})
+    .then((doc) => {
+      if (!doc) {
+        console.log('Unable to find by ID and update garage.');
+        return res.status(404).send();
+      }
+      bike.save()
+        .then((bike) => {
+          res.send(bike);
+        })
+        .catch((e) => {
+          console.log('Unable to add bike to garage.');
+        })
+    })
+})
 
 
 

@@ -8,6 +8,8 @@ const carSchema  = new Schema({
     type: String,
     required: true
   },
+  // tracking where else this item is stored is necessary in order to find it later
+  // it acts a foreign key
   owner: {
     type: ObjectId,
     ref: 'Garage'

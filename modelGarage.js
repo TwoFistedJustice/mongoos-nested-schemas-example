@@ -14,13 +14,20 @@ const garageSchema  = new Schema({
     type: ObjectId,
     ref: 'Car'
   },
-  bikes: [
-    {
-    type: ObjectId,
-    ref: 'Bike'
-  }
-  ]
-
+  // there is little reason to have an array of pointers here
+  // we can store the garage id along with each bike in the bikes table and just
+  // keep a count of the bikes here, occasionally syncing them
+  // by finding all bikes and comparing the counts
+  // bikes: [
+  //   {
+  //   type: ObjectId,
+  //   ref: 'Bike'
+  // }
+  // ]
+bikeCount: {
+    type: Number,
+    default: 0
+}
 });
 
 const Garage = mongoose.model('Garage', garageSchema);
