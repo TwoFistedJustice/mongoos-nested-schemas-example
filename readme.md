@@ -4,10 +4,12 @@ The goal is to build a simple working example of a Express/Mongodb/Mongoose stac
 that uses Mongoose nested schemas.
 
 **The Story**
+
 The story is that we have a garage with one car and several bikes. All we care about the 
 vehicles is what their color is.
 
 **The Data Structure**
+
 The Garage schema has one nested Car schema,and a nested array of Bike schemas.
 
 
@@ -22,6 +24,7 @@ Modify the array of bikes by adding, removing, or updating elements of the array
 
 
 **Configuration:**
+
 Dependencies are: Express, Mongodb, Mongoose, and Body Parser.
 
 Mongo will run on localhost at 'mongodb://localhost:27017/nested'.
