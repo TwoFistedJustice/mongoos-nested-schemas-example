@@ -54,15 +54,14 @@ app.patch('/garage/:id', (req, res) => {
   let car = new Car({color: color, owner: owner});
   
   
-  
-  Garage.findByIdAndUpdate(id, {$set: {car: car}, $inc: {carCount: 1}}, {new: true})
+  Garage.findByIdAndUpdate(id, {$set: {car: car}}, {new: true})
     .then((doc) => {
       if (!doc) {
         console.log('---------------------> find by id and update failed');
         res.status(400).send();
       }
       
-      if(doc.carCount !== 0) {
+      if(doc.car !== null) {
         Car.findOneAndDelete({owner: owner}, (doc) => {
           console.log("removing ", doc);
         });
