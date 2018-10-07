@@ -28,6 +28,8 @@ level schemas.
 
 **Configuration:**
 
+The app is meant to be run in node.
+
 Dependencies are: Express, Mongodb, Mongoose, and Body Parser.
 
 Mongo will run on localhost at 'mongodb://localhost:27017/nested'.
