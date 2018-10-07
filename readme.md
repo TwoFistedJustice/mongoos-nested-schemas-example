@@ -1,6 +1,6 @@
-#How to Use Mongoose Nested Schemas
+# How to Use Mongoose Nested Schemas
 
-###It doesn't work yet!
+### It doesn't work yet!
 
 The goal is to build a simple working example of a Express/Mongodb/Mongoose stack
 that uses Mongoose nested schemas.
