@@ -1,7 +1,10 @@
-**How to Use Mongoose Nested Schemas**
+#How to Use Mongoose Nested Schemas
+
+###It doesn't work yet!
 
 The goal is to build a simple working example of a Express/Mongodb/Mongoose stack
 that uses Mongoose nested schemas.
+
 
 **The Story**
 
@@ -15,12 +18,12 @@ The Garage schema has one nested Car schema,and a nested array of Bike schemas.
 
 **When the app is done it should be able to:**
 
-Create a new garage. This is pretty straightforward, and we won't focus on making/deleting top
+1. Create a new garage. This is pretty straightforward, and we won't focus on making/deleting top
 level schemas.
 
-Add or replace the car in the garage without throwing errors.
+2. Add or replace the car in the garage without throwing errors.
 
-Modify the array of bikes by adding, removing, or updating elements of the array without throwing errors.
+3. Modify the array of bikes by adding, removing, or updating elements of the array without throwing errors.
 
 
 **Configuration:**
@@ -35,15 +38,15 @@ Schemas are defined in the 'model...' files.
 
 **Files in the Repo**
 
-app.js ---> starting point, location of express server
+1. app.js ---> starting point, location of express server
 
-mongooseConfig.js ---> four lines to make Mongoose kill cobras.
+2. mongooseConfig.js ---> four lines to make Mongoose kill cobras.
 
-modelGarage.js ---> the top level schema
+3. modelGarage.js ---> the top level schema
 
-modelCar.js ---> the single nested schema
+4. modelCar.js ---> the single nested schema
 
-modelBike.js ---> the array nested schema
+5. modelBike.js ---> the array nested schema
 
 
 
