@@ -48,11 +48,18 @@ app.get('/garage/:id', (req, res) => {
 
 
 
-
-
-
 app.listen(3000, () => {
 console.log('Listening on port 3000');
 });
 
+
+// this shows that it Schema.Types.ObjectId is the same as mongoose.Object
+var showObjIdEqual = function() {
+  let test = mongoose.ObjectId === mongoose.Schema.Types.ObjectId;
+  console.log(`It is ${test} that the declarations are interchangeable.`);
+};
+
+showObjIdEqual();
+
 module.exports = {app};
+
