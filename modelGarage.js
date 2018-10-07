@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const {ObjectId} = Schema.Types;
 const {Car} = require('./modelCar');
+const {Bike} = require('./modelBike');
 
 const garageSchema  = new Schema({
   name: {
@@ -9,11 +10,16 @@ const garageSchema  = new Schema({
     required: true
   },
   // garage can store one car
-  cars: {
+  car: {
     type: ObjectId,
     ref: 'Car'
   },
-  bikes: []
+  bikes: [
+    {
+    type: ObjectId,
+    ref: 'Bike'
+  }
+  ]
 
 });
 

@@ -13,7 +13,7 @@ const {Bike} = require('./modelBike');
 app.use(bodyParser.json());
 
 
-//define a route to put a Garage in the db
+// Routes that save and fetch simple Garage ojbects to the db
 app.post('/garage', (req, res) => {
   let garage = new Garage({name: req.body.name});
   garage.save()
@@ -40,10 +40,47 @@ app.get('/garage/:id', (req, res) => {
       res.send({doc});
     })
     .catch((e) => {
-      console.error('Unable to finc garage');
+      console.error('---------------------> Unable to find garage');
       res.status(404).send();
     });
 });
+
+
+app.patch('/garage/:id', (req, res) => {
+  let id = req.params.id;
+  let color = req.body.color;
+  
+  let car = new Car({color: color});
+  
+  Garage.findByIdAndUpdate(id, {$set: {car: car}}, {new: true})
+    .then((doc) => {
+      if (!doc) {
+        console.log('---------------------> find by id and update failed');
+        res.status(400).send();
+      }
+  
+      car.save()
+        .then((doc) => {
+          res.send(doc);
+        })
+        .catch((e) => {
+          console.log('Unable to add car to garage');
+        });
+      
+    })
+  
+  
+  
+  
+});
+
+
+
+
+
+
+
+
 
 
 
