@@ -1,6 +1,17 @@
 # How to Use Mongoose Nested Schemas
 
-### It doesn't work yet!
+### What is Completed:
+
+Add a garage
+
+Add a car
+
+Replace the car with a new car - sorry you only get to keep the most recent one.
+ You liked the old one better??? Well you should have thought about that before 
+ you clicked 'send'!
+ 
+Add a bike. You can have as many bikes as you like. By the way I sold your old car
+ and blew the money at the tables. 
 
 The goal is to build a simple working example of a Express/Mongodb/Mongoose stack
 that uses Mongoose nested schemas.
