@@ -98,7 +98,31 @@ app.patch('/bike/:garageId', (req, res) => {
           console.log('Unable to add bike to garage.');
         })
     })
-})
+});
+
+app.delete('/bike/:bikeId', (req, res) => {
+  let bikeId = req.params.bikeId;
+  // use remove() because it returns the doc and lets us get the ownerID
+  Bike.findByIdAndRemove(bikeId)
+    .then((bike) => {
+      console.log(`Removing ${bike}`);
+      return bike.owner;
+    })
+    .then((owner) => {
+      Garage.findByIdAndUpdate(owner, {$inc: {bikeCount: -1}}, {new: true})
+        .then((garage) => {
+          if (!garage) {
+            return console.log('Unable to find garage.');
+          }
+          res.send(garage);
+        })
+      
+    })
+    .catch((e) => {
+      console.log("The bike exploded and everyone died", e);
+    });
+    
+  });
 
 
 
