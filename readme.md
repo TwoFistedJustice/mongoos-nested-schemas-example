@@ -19,12 +19,21 @@ that uses Mongoose nested schemas.
 
 **The Story**
 
-The story is that we have a garage with one car and several bikes. All we care about the 
-vehicles is what their color is.
+The story is that we have a garage with one car and several bikes. 
 
 **The Data Structure**
 
-The Garage schema has one nested Car schema,and a nested array of Bike schemas.
+
+The Garage Schema has: 
+ - one nested Car model,
+ - a bikeCount prop which tracks the number of bike refs leading back to garage
+ - a nested array of tool schemas
+ 
+The Bike Schema has:
+  - a ref back to the garage which "owns" the bike
+  
+The Tool Schema has:
+  - no refs to anything. It is encapsulated within a Garage Shcema (object) 
 
 
 **When the app is done it should be able to:**
@@ -57,9 +66,11 @@ Schemas are defined in the 'model...' files.
 
 3. modelGarage.js ---> the top level schema
 
-4. modelCar.js ---> the single nested schema
+4. modelCar.js ---> the single nested model
 
-5. modelBike.js ---> the array nested schema
+5. modelBike.js ---> tracked by refs
+
+6. modelTool.js ---> the array nested schema
 
 
 
