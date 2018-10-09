@@ -135,7 +135,9 @@ app.patch('/tools/:garageId', (req, res) => {
   let garageId = req.params.garageId;
   let tool = new Tool({toolName: req.body.toolName});
   
-  Garage.findByIdAndUpdate(garageId, {$push: {tools: tool}}, {new: true})
+  // evidently the $push isn't necessary since it seems to work without it
+  // Garage.findByIdAndUpdate(garageId, {$push: {tools: tool}}, {new: true})
+  Garage.findByIdAndUpdate(garageId, {new: true})
     .then((garage) => {
       if (!garage) {
         console.log('Unable to find by ID and update garage.');
