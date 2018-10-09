@@ -10,8 +10,10 @@ const {Garage} = require('./modelGarage');
 const {Car} = require('./modelCar');
 const {Bike} = require('./modelBike');
 
-app.use(bodyParser.json());
+// const {toolSchema} = require('./modelTool');
+const {Tool} = require('./modelTool');
 
+app.use(bodyParser.json());
 
 // Routes that save and fetch simple Garage ojbects to the db
 app.post('/garage', (req, res) => {
@@ -25,7 +27,6 @@ app.post('/garage', (req, res) => {
      })
 });
 
-
 app.get('/garage/:id', (req, res) => {
   let id = req.params.id;
   if (!ObjectID.isValid(id)) {
@@ -33,11 +34,11 @@ app.get('/garage/:id', (req, res) => {
   }
   
   Garage.findById(id)
-    .then((doc) => {
-      if (!doc) {
+    .then((garage) => {
+      if (!garage) {
         return res.status(400).send();
       }
-      res.send({doc});
+      res.send({garage});
     })
     .catch((e) => {
       console.log('Unable to find by ID garage.');
@@ -55,24 +56,25 @@ app.patch('/car/:garageId', (req, res) => {
   let car = new Car({color: color, owner: owner});
   
   Garage.findByIdAndUpdate(id, {$set: {car: car}}, {new: true})
-    .then((doc) => {
-      if (!doc) {
+    .then((garage) => {
+      if (!garage) {
         console.log('Unable to find by ID and update garage.');
         return res.status(400).send();
       }
       
-      if(doc.car !== null) {
+      if(garage.car !== null) {
         Car.findOneAndDelete({owner: owner}, (doc) => {
           console.log("removing ", doc);
         });
       }
   
       car.save()
-        .then((doc) => {
-          res.send(doc);
+        .then((car) => {
+          res.send(car);
         })
         .catch((e) => {
           console.log('Unable to add car to garage.');
+          return res.status(400).send();
         });
     })
 });
@@ -85,8 +87,8 @@ app.patch('/bike/:garageId', (req, res) => {
   let bike = new Bike({color: color, owner: owner});
 
   Garage.findByIdAndUpdate(id, {$inc: {bikeCount: 1}}, {new: true})
-    .then((doc) => {
-      if (!doc) {
+    .then((garage) => {
+      if (!garage) {
         console.log('Unable to find by ID and update garage.');
         return res.status(404).send();
       }
@@ -96,10 +98,12 @@ app.patch('/bike/:garageId', (req, res) => {
         })
         .catch((e) => {
           console.log('Unable to add bike to garage.');
+          return res.status(400).send();
         })
     })
 });
 
+// Finds a bike by ID, removes it, and decrements the owner's bikeCount
 app.delete('/bike/:bikeId', (req, res) => {
   let bikeId = req.params.bikeId;
   // use remove() because it returns the doc and lets us get the ownerID
@@ -116,13 +120,42 @@ app.delete('/bike/:bikeId', (req, res) => {
           }
           res.send(garage);
         })
-      
     })
     .catch((e) => {
-      console.log("The bike exploded and everyone died", e);
+      console.log("The bike exploded and the garage burned down. Sorry.", e);
+      return res.status(400).send();
     });
-    
   });
+
+/*
+*  Tool Schema Array Routes
+* */
+
+app.patch('/tools/:garageId', (req, res) => {
+  let garageId = req.params.garageId;
+  let tool = new Tool({toolName: req.body.toolName});
+  
+  Garage.findByIdAndUpdate(garageId, {$push: {tools: tool}}, {new: true})
+    .then((garage) => {
+      if (!garage) {
+        console.log('Unable to find by ID and update garage.');
+        return res.status(404).send();
+      }
+      garage.toolChest.push(tool);
+      garage.save()
+        .then((garage) => {
+         garage.send();
+        })
+        .catch((e) => {
+          console.log(garage);
+          console.log("Your tool fell off and rolled away.", e);
+          return res.status(400).send();
+        })
+      
+    });
+
+});
+
 
 
 

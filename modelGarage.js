@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const {ObjectId} = Schema.Types;
+
+// Note: both Car and Bike are imported as MODELS,
+// while toolSchema is a schema
 const {Car} = require('./modelCar');
 const {Bike} = require('./modelBike');
+const {toolSchema} = require('./modelTool');
 
 const garageSchema  = new Schema({
   name: {
@@ -27,7 +31,10 @@ const garageSchema  = new Schema({
 bikeCount: {
     type: Number,
     default: 0
-}
+},
+  // https://docs.mongodb.com/manual/reference/operator/update-array/
+ toolChest: [toolSchema]
+
 });
 
 const Garage = mongoose.model('Garage', garageSchema);
