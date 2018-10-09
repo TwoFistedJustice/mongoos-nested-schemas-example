@@ -20,12 +20,12 @@ const toolSchema  = new Schema({
 
 // copied from Docs:
 // https://mongoosejs.com/docs/subdocs.html#altsyntax
-toolSchema.pre('save', function (next) {
-  if ('invalid' == this.name) {
-    return next(new Error('#sadpanda'));
-  }
-  next();
-});
+// toolSchema.pre('save', function (next) {
+//   if ('invalid' == this.name) {
+//     return next(new Error('#sadpanda'));
+//   }
+//   next();
+// });
 
 
 /*
