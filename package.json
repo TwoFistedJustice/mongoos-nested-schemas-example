@@ -4,8 +4,9 @@
   "description": "A working example of mongoose nested shcemas",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "test": "echo \"Ain't no one here but us chickens\" && exit 1"
+    "start": "node app.js",
+    "start-dev": "nodemon app.js",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha tests/*.test.js"
   },
   "keywords": [
     "mongoose",
@@ -22,6 +23,9 @@
     "mongoose": "^5.2.18"
   },
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4",
+    "supertest": "^3.3.0"
   }
 }

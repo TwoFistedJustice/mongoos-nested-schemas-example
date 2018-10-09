@@ -5,6 +5,7 @@ const {mongoose} = require('./mongooseConfig');
 const {ObjectID} = require('mongodb');
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 const {Garage} = require('./modelGarage');
 const {Car} = require('./modelCar');
@@ -195,8 +196,8 @@ app.patch('/dropTool/:garageId', (req, res) => {
 
 
 
-app.listen(3000, () => {
-console.log('Listening on port 3000');
+app.listen(port, () => {
+console.log(`Listening on port ${port}`);
 });
 
 
