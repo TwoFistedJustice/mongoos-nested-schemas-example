@@ -144,7 +144,7 @@ app.patch('/tools/:garageId', (req, res) => {
       garage.toolChest.push(tool);
       garage.save()
         .then((garage) => {
-         garage.send();
+         res.send(garage);
         })
         .catch((e) => {
           console.log(garage);
