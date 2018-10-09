@@ -153,11 +153,45 @@ app.patch('/tools/:garageId', (req, res) => {
           console.log("Your tool fell off and rolled away.", e);
           return res.status(400).send();
         })
-      
     });
-
 });
 
+app.patch('/dropTool/:garageId', (req, res) => {
+  let garageId = req.params.garageId;
+
+  // this will remove ALL elements that meet the criteria
+  // so be careful about passing in non-unique values
+  // consider using the unique object id whenever possible
+  Garage.findByIdAndUpdate(garageId, {$pull:{toolChest: {toolName: req.body.toolName}}}, {new: true})
+    .then((garage) => {
+      
+      if (!garage) {
+        console.log('Unable to find by ID and update garage.');
+        return res.status(400).send();
+      }
+      // TODO -- not really "todos". Just using it for the syntax highlighting in Webstorm
+      // TODO you can call .pull() passing in a specific objectId
+      // garage.toolChest.pull('5bbbfeb6c5ce8f27f809f89b');
+      
+      // TODO you cannot pass in any other conditions, it won't work
+      // garage.toolChest.pull({toolName: "awl"});
+      
+      // TODO This appears to work the same as .pull()
+      // garage.toolChest.id('5bbc25acb3c39d28d47a3a3f').remove();
+      
+      garage.save()
+        . then((garage) => {
+            res.send(garage);
+        })
+    
+    })
+    .catch((e) => {
+      console.log(garage);
+      console.log("Your tool fell off and rolled away.", e);
+      return res.status(400).send();
+    });
+  
+});
 
 
 
