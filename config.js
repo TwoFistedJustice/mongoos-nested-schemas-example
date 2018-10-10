@@ -6,12 +6,17 @@
  */
 
 const env = process.env.NODE_ENV || 'development';
+const devURI = 'NestedSchemas';
+const testURI = 'NestedSchemasTest';
 
+console.log(`env is set to ${env}`);
 if (env === 'development') {
  process.env.port = 3000;
- process.env.MONGODB_URI = 'mongodb://localhost:27017/NestedSchemas';
+ process.env.MONGODB_URI = `mongodb://localhost:27017/${devURI}`;
 } else if (env === 'test') {
   process.env.port = 3000;
-  process.env.MONGODB_URI = 'mongodb://localhost:27017/NestedSchemasTest'
+  process.env.MONGODB_URI = `mongodb://localhost:27017/${testURI}`;
 }
+
+console.log(`Mongo URI set to: ${process.env.MONGODB_URI}`);
 
