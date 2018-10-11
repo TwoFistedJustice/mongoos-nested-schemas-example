@@ -152,35 +152,57 @@ describe('PATCH /car/:garageId', () => {
   })
 });
 
-
-
 // Patch Bike to garage by garage id
 describe('PATCH /bike/:garageId', () => {
-/*
- set top level vars:
-   - previousCount to 0
-   - currentCount to 0
-   - color
-   
-   
- Find the garage by ID
-   - set previousCount to bikeCount for use later
+  let garageId = twinberryPeaks[0]._id.toHexString();
+  let previousCount = 0;
+  let previousBikeId = null;
+  let currentCount = 0;
+  let color = 'plaid';
   
- Patch the garage in the DB
-   Add a bike to it
-   verify that:
-     bikecount went up by one
-     
+  it('should fetch the previous bike count', (done) => {
+    Garage.find({_id: garageId})
+      .then((garage) => {
+          previousCount = garage[0].bikeCount;
+          done();
+      })
+      .catch((e) => {
+        done(e);
+      })
+  });
+  
+  it('should add a bike to the database', () => {
+    request(app)
+      .patch(`/bike/${garageId}`)
+      .send({color})
+      .expect(200)
+      .expect((res) => {
+        console.log(res.body);
+        previousBikeId = res.body._id;
+        expect(res.body).toExist();
+        expect(res.body.owner).toEqual(garageId);
+        expect(res.body.color).toEqual(color);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        done();
+      })
+  });
+  /*
    
-   Query the bikes collection
-     - verfy that the bike exists
-     - the owner is the same as the garage id
-     - the color is correct
+   Patch the garage in the DB
+     Add a bike to it
+     verify that:
+       bikecount went up by one
+       
      
-    Count all the bikes in the collection with owner id equal to garageid
-    verify that the count is equal to the current bikeCount
-
-*/
+       
+      Count all the bikes in the collection with owner id equal to garageid
+      verify that the count is equal to the current bikeCount
+  
+  */
 
 });
 
