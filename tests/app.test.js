@@ -20,7 +20,7 @@ const twinberryPeaks = [
 
 
 beforeEach((done) => {
-  // Garage.remove({}).then(() => {done()});
+  console.log('beforeEach');
   Car.remove({}).then(() => {
     Garage.remove({})
       .then(() => {
@@ -171,34 +171,51 @@ describe('PATCH /bike/:garageId', () => {
       })
   });
   
-  it('should add a bike to the database', () => {
+  /*
+  * In order to test two collections in one it()
+  * you have to chain the requests
+  * do so by passing an anonymous fn into end
+  * and making the next request the body of the function
+  * you call done() from the deepest .end() in the chain
+  * */
+  it('should add a bike to the database', (done) => {
     request(app)
       .patch(`/bike/${garageId}`)
       .send({color})
       .expect(200)
       .expect((res) => {
-        console.log(res.body);
         previousBikeId = res.body._id;
         expect(res.body).toExist();
         expect(res.body.owner).toEqual(garageId);
         expect(res.body.color).toEqual(color);
       })
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        done();
-      })
+      .end(() => {
+        request(app)
+          .get(`/garage/${garageId}`)
+          .expect(200)
+          .expect((res) => {
+            expect(res.body.garage.bikeCount - previousCount).toEqual(1);
+          })
+    
+          .end((err, res) => {
+            if (err) {
+              return done(err);
+            }
+            done();
+          })
+      });
+  
+    
+    
+    
+    
   });
+  
   /*
    
    Patch the garage in the DB
-     Add a bike to it
-     verify that:
-       bikecount went up by one
-       
-     
-       
+   
+   
       Count all the bikes in the collection with owner id equal to garageid
       verify that the count is equal to the current bikeCount
   
