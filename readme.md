@@ -45,6 +45,8 @@ level schemas.
 
 3. Modify the array of bikes by adding, removing, or updating elements of the array without throwing errors.
 
+4. Add and remove tools as complete subdocs from the tools array.
+
 
 **Configuration:**
 
@@ -52,17 +54,17 @@ The app is meant to be run in node.
 
 Dependencies are: Express, Mongodb, Mongoose, and Body Parser.
 
-Mongo will run on localhost at 'mongodb://localhost:27017/nested'.
+Mongo will run in the development environment at localhost at 'mongodb://localhost:27017/NestedSchemas'.
 
 Mongoose will use native ES6 promises.
 
 Schemas are defined in the 'model...' files.
 
-**Files in the Repo**
+**Files in the App**
 
 1. app.js ---> starting point, location of express server
 
-2. mongooseConfig.js ---> four lines to make Mongoose kill cobras.
+2. config.js ---> environment variable config and mongoose configuration
 
 3. modelGarage.js ---> the top level schema
 
@@ -72,7 +74,23 @@ Schemas are defined in the 'model...' files.
 
 6. modelTool.js ---> the array nested schema
 
+7. notes.html ---> notes I took, links to docs or stackoverlflow
 
+
+
+**Unit Testing**
+Unit tests are built on
+ - Mocha
+ - Expect
+ - SuperTest (pre-Jest)
+ 
+ Mongo will run in the test environment at localhost at 'mongodb://localhost:27017/NestedSchemasTest'.
+ 
+ You can set the tests to run until you change something by running "npm run test-watch"
+ 
+ These are the first unit tests I've written from scratch. 
+ 
+ 
 
 
 
