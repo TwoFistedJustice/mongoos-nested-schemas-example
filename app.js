@@ -63,7 +63,7 @@ app.patch('/car/:garageId', (req, res) => {
     .then((garage) => {
       if (!garage) {
         console.log('Unable to find by ID and update garage.');
-        return res.status(400).send();
+        return res.status(404).send();
       }
       
       if(garage.car !== null) {
