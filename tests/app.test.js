@@ -141,7 +141,7 @@ describe('PATCH /car/:garageId', () => {
       .send({color})
       .expect(404)
       .expect((res) => {
-        expect(res.body).toEqual({}, 'farty');
+        expect(res.body).toEqual({});
       })
       .end((err, res) => {
         if (err) {
@@ -149,30 +149,42 @@ describe('PATCH /car/:garageId', () => {
         }
         done();
       })
-    
   })
-  
-  
 });
 
-/*
+
 
 // Patch Bike to garage by garage id
 describe('PATCH /bike/:garageId', () => {
+/*
+ set top level vars:
+   - previousCount to 0
+   - currentCount to 0
+   - color
+   
+   
+ Find the garage by ID
+   - set previousCount to bikeCount for use later
+  
+ Patch the garage in the DB
+   Add a bike to it
+   verify that:
+     bikecount went up by one
+     
+   
+   Query the bikes collection
+     - verfy that the bike exists
+     - the owner is the same as the garage id
+     - the color is correct
+     
+    Count all the bikes in the collection with owner id equal to garageid
+    verify that the count is equal to the current bikeCount
 
-
-// bike count went up
-// get bikeCount before
-// get bikecount after
-
-// bike exists
-// bike owner is garage id
-// bike color is correc
-
+*/
 
 });
 
-*/
+
 
 
 /*
