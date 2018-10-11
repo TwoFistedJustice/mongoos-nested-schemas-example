@@ -68,6 +68,25 @@ describe('POST /garage', () => {
 });
 
 
+describe('GET /garage/:id', () => {
+  let id = twinberryPeaks[0]._id.toHexString();
+  it('gets a garage from the database', (done) => {
+    request(app)
+      .get(`/garage/${id}`)
+      .expect(200)
+      .expect((res) => {
+        // console.log(res.body);
+        expect(res.body.garage).toExist();
+        expect(res.body.garage.name).toEqual(twinberryPeaks[0].name);
+        expect(res.body.garage._id).toEqual(id);
+      })
+      .end(done);
+  })
+  
+});
+
+
+
 // Patch Car to garage by garage id
 describe('PATCH /car/:garageId', () => {
   let garageId = twinberryPeaks[0]._id.toHexString();
@@ -114,31 +133,50 @@ describe('PATCH /car/:garageId', () => {
             });
       });
   });
-});
-/*
-
-
-request(app)
-      .patch(`/car/${garageId}`)
-      .send(color)
-      .expect(200)
+  
+  it('should return a 404 when given a non-existent id', (done) => {
+    let noExist = new ObjectID();
+    request(app)
+      .patch(`/car/${noExist}`)
+      .send({color})
+      .expect(404)
       .expect((res) => {
-        expect(res.body).toInclude(color)
+        expect(res.body).toEqual({}, 'farty');
       })
       .end((err, res) => {
         if (err) {
-        return done(err);
+          return done(err);
         }
-      }
-      });
+        done();
+      })
+    
+  })
+  
+  
+});
 
-
-
+/*
 
 // Patch Bike to garage by garage id
 describe('PATCH /bike/:garageId', () => {
 
+
+// bike count went up
+// get bikeCount before
+// get bikecount after
+
+// bike exists
+// bike owner is garage id
+// bike color is correc
+
+
 });
+
+*/
+
+
+/*
+
 
 // DELETE bike by bike id
 describe('DELETE /bike/:bikeId', () => {
