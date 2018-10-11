@@ -81,8 +81,8 @@ Schemas are defined in the 'model...' files.
 **Unit Testing**
 Unit tests are built on
  - Mocha
- - Expect
- - SuperTest (pre-Jest)
+ - Expect (pre-Jest)
+ - SuperTest 
  
  Mongo will run in the test environment at localhost at 'mongodb://localhost:27017/NestedSchemasTest'.
  
