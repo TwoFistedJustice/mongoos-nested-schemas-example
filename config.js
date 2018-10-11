@@ -4,7 +4,6 @@
  https://codeburst.io/process-env-what-it-is-and-why-when-how-to-use-it-effectively-505d0b2831e7
  
  */
-
 const env = process.env.NODE_ENV || 'development';
 const devURI = 'NestedSchemas';
 const testURI = 'NestedSchemasTest';
@@ -20,3 +19,9 @@ if (env === 'development') {
 
 console.log(`Mongo URI set to: ${process.env.MONGODB_URI}`);
 
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+
+
+module.exports = {mongoose};

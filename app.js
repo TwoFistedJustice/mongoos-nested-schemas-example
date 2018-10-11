@@ -2,7 +2,8 @@ require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const {mongoose} = require('./mongooseConfig');
+// const {mongoose} = require('./mongooseConfig');
+const {mongoose} = require('./config');
 const {ObjectID} = require('mongodb');
 
 
