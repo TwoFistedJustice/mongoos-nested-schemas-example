@@ -60,7 +60,7 @@ app.get('/bikes/:garageId', (req, res) => {
       if (!bikes) {
         return res.status(404).send();
       }
-      res.send({bikes});
+      res.send(bikes);
     })
     .catch((e) => {
      console.log('Unable to find bikes by owner.');
