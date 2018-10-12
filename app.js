@@ -50,6 +50,24 @@ app.get('/garage/:id', (req, res) => {
     });
 });
 
+app.get('/bikes/:garageId', (req, res) => {
+  let id = req.params.garageId;
+  if (!ObjectID.isValid(id)) {
+    return res.status(400).send();
+  }
+  Bike.find({owner: id})
+    .then((bikes) => {
+      if (!bikes) {
+        return res.status(404).send();
+      }
+      res.send({bikes});
+    })
+    .catch((e) => {
+     console.log('Unable to find bikes by owner.');
+     res.status(404).send();
+    })
+  
+});
 
 // this route adds a car to the garage, and removes any previously added car
 
@@ -130,6 +148,9 @@ app.delete('/bike/:bikeId', (req, res) => {
       return res.status(400).send();
     });
   });
+
+
+
 
 /*
 *  Tool Schema Array Routes
