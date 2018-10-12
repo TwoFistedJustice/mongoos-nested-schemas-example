@@ -286,14 +286,25 @@ describe ('PATCH /bike/:garageId', () => {
 }); // end describe
 
 
-// DELETE bike by bike id
-// describe ('DELETE /bike/:bikeId', () => {
-//   it('should remove the selected bike from the bikes collection', (done) => {
-//     request(app)
-//       .get()
-//   });
-// });
-
+describe ('GET /bike/:bikeId', () => {
+  let id = badAssHarley[0]._id.toHexString();
+  it('should get the selected bike from the bikes collection', (done) => {
+    request(app)
+      .get(`/bike/${id}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toExist();
+        expect(res.body.color).toEqual(badAssHarley[0].color);
+        expect(res.body.owner).toEqual(twinberryPeaks[0]._id);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+      done();
+      })
+  });
+});
 
 /*
 // Patch tool add to garage by garage id

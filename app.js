@@ -91,6 +91,9 @@ app.get('/bike/:bikeId', (req, res) => {
   
   Bike.findById(id)
     .then((bike) => {
+      if (! bike) {
+        res.status(404).send();
+      }
       res.send(bike);
     }).catch((e) => {
     res.status(404).send();
@@ -161,7 +164,7 @@ app.delete('/bike/:bikeId', (req, res) => {
   // use remove() because it returns the doc and lets us get the ownerID
   Bike.findByIdAndRemove(bikeId)
     .then((bike) => {
-      console.log(`Removing ${bike}`);
+      // console.log(`Removing ${bike}`);
       return bike.owner;
     })
     .then((owner) => {
