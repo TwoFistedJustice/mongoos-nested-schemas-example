@@ -62,6 +62,7 @@ app.get('/garage/:id', (req, res) => {
     });
 });
 
+
 app.get('/bikes/:garageId', (req, res) => {
   let id = req.params.garageId;
   if (!ObjectID.isValid(id)) {
@@ -80,6 +81,22 @@ app.get('/bikes/:garageId', (req, res) => {
     })
   
 });
+
+
+app.get('/bike/:bikeId', (req, res) => {
+  let id = req.params.bikeId;
+  if (!ObjectID.isValid(id)) {
+    return res.status(400).send();
+  }
+  
+  Bike.findById(id)
+    .then((bike) => {
+      res.send(bike);
+    }).catch((e) => {
+    res.status(404).send();
+  })
+});
+
 
 // this route adds a car to the garage, and removes any previously added car
 
@@ -136,6 +153,7 @@ app.patch('/bike/:garageId', (req, res) => {
         })
     })
 });
+
 
 // Finds a bike by ID, removes it, and decrements the owner's bikeCount
 app.delete('/bike/:bikeId', (req, res) => {
