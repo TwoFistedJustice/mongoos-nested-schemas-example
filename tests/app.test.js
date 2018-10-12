@@ -20,17 +20,19 @@ const twinberryPeaks = [
 
 
 beforeEach((done) => {
-  console.log('beforeEach');
-  Car.remove({}).then(() => {
-    Garage.remove({})
-      .then(() => {
-        // ordered: true is make it fail on the first error
-        Garage.insertMany(twinberryPeaks, {}, {ordered: true})
-          .then(() => {done();})
-          .catch((e) => {
-            return console.log("Unable to save Twinberry Peaks");
-          });
-      });
+  // console.log('beforeEach');
+  Bike.remove({}).then(() => {
+    Car.remove({}).then(() => {
+      Garage.remove({})
+        .then(() => {
+          // ordered: true is make it fail on the first error
+          Garage.insertMany(twinberryPeaks, {}, {ordered: true})
+            .then(() => {done();})
+            .catch((e) => {
+              return console.log("Unable to save Twinberry Peaks");
+            });
+        });
+    });
   });
   
 });
@@ -113,7 +115,7 @@ describe('PATCH /car/:garageId', () => {
         
         Garage.find()
           .then((garages) => {
-            console.log(garages[0].car)
+            // console.log(garages[0].car)
             expect(garages[0].car).toExist();
             done();
           })
@@ -155,7 +157,7 @@ describe('PATCH /car/:garageId', () => {
 // Patch Bike to garage by garage id
 describe('PATCH /bike/:garageId', () => {
   let garageId = twinberryPeaks[0]._id.toHexString();
-  let previousCount = 0;
+  let originalCount = 0;
   let previousBikeId = null;
   let currentCount = 0;
   let color = 'plaid';
@@ -163,7 +165,7 @@ describe('PATCH /bike/:garageId', () => {
   it('should fetch the previous bike count', (done) => {
     Garage.find({_id: garageId})
       .then((garage) => {
-          previousCount = garage[0].bikeCount;
+          originalCount = garage[0].bikeCount;
           done();
       })
       .catch((e) => {
@@ -194,7 +196,8 @@ describe('PATCH /bike/:garageId', () => {
           .get(`/garage/${garageId}`)
           .expect(200)
           .expect((res) => {
-            expect(res.body.garage.bikeCount - previousCount).toEqual(1);
+            currentCount = res.body.garage.bikeCount;
+            expect(currentCount - originalCount).toEqual(1);
           })
     
           .end((err, res) => {
@@ -202,16 +205,66 @@ describe('PATCH /bike/:garageId', () => {
               return done(err);
             }
             done();
-          })
+          });
       });
+  });
   
-    
-    
-    
+  
+  
+  
+  it('should have the same bikeCount as bikes owned in the bikes collection', (done) => {
+    // let ownedBikesInCollection = 0;
+    let garageBikeCount = 0;
+    request(app)
+      .patch(`/bike/${garageId}`)
+      .send({color})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toExist();
+        expect(res.body.owner).toEqual(garageId);
+        expect(res.body.color).toEqual(color);
+      })
+      .end(() => {
+        request(app)
+          .patch(`/bike/${garageId}`)
+          .send({color: 'blue'})
+          .expect(200)
+          .expect((res) => {
+            expect(res.body).toExist();
+            expect(res.body.owner).toEqual(garageId);
+            expect(res.body.color).toEqual('blue');
+          }).end(() => {
+            request(app)
+              .get(`/bikes/${garageId}`)
+              .expect(200)
+              .expect((res) => {
+               console.log(res.body);
+               console.log("check owned vs bikes.length");
+              })
+              .end((err, res) => {
+                if (err) {
+                  return done(err);
+                }
+                done();
+              })
+          })
+          
+      });
+      
     
   });
   
+  
   /*
+   
+   .end((err, res) => {
+            if (err) {
+              return done(err);
+            }
+            done();
+          })
+        
+   
    
    Patch the garage in the DB
    
