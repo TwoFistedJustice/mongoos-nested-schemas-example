@@ -306,6 +306,76 @@ describe ('GET /bike/:bikeId', () => {
   });
 });
 
+describe ('DELETE /bike/:bikeId', () => {
+  let id = badAssHarley[0]._id.toHexString();
+  it('should remove the selected bike from the bikes collection', (done) => {
+    request(app)
+      .delete(`/bike/${id}`)
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        request(app)
+          .get(`/bike/${id}`)
+          .expect(404)
+          .expect((res) => {
+            expect(res.body).toEqual({});
+          })
+          .end((err, res) => {
+            if (err) {
+              return done(err);
+            }
+            done();
+          })
+      })
+  });
+  
+  it('should decrement the owner\'s bike count', (done) => {
+    let previousBikeCount = 0;
+    let owner = null;
+    request(app)
+      .get(`/bike/${id}`)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        owner = res.body.owner;
+        request(app)
+          .get(`/garage/${owner}`)
+          .end((err, res) => {
+            if (err) {
+              return done(err);
+            }
+            previousBikeCount = res.body.garage.bikeCount;
+            
+            request(app)
+              .delete(`/bike/${id}`)
+              .end((err, res) => {
+                request(app)
+                  .get(`/garage/${owner}`)
+                  .expect((res) => {
+                    let currentCount = res.body.garage.bikeCount;
+                    expect(previousBikeCount - currentCount).toEqual(1);
+                  })
+                  .end((err, res) => {
+                    if (err) {
+                      return done(err);
+                    }
+                    done();
+                  })
+              })
+          });
+      });
+  });
+  
+  
+  
+  
+});
+
+
+
 /*
 // Patch tool add to garage by garage id
 describe('PATCH /tools/:garageId', () => {
