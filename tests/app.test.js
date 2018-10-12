@@ -210,7 +210,16 @@ describe('PATCH /bike/:garageId', () => {
   });
   
   
-  
+  /*
+  *  The key to getting multiple request(app) calls to talk to each other
+  *  is to use the second argument in end(err, res){}
+  *  That second argument is the return value of the previous
+  *  .expect() call
+  *
+  *  This test adds two bikes in succession and in the final end() call
+  *  checks that garage.bikeCount is equal to the number of owned bikes in the
+  *  bikes collection
+  * */
   
   it('should have the same bikeCount as bikes owned in the bikes collection', (done) => {
     // let ownedBikesInCollection = 0;
@@ -233,48 +242,37 @@ describe('PATCH /bike/:garageId', () => {
             expect(res.body).toExist();
             expect(res.body.owner).toEqual(garageId);
             expect(res.body.color).toEqual('blue');
-          }).end(() => {
+          }).end((err, res) => {
             request(app)
               .get(`/bikes/${garageId}`)
               .expect(200)
-              .expect((res) => {
-               console.log(res.body);
-               console.log("check owned vs bikes.length");
-              })
               .end((err, res) => {
                 if (err) {
                   return done(err);
                 }
-                done();
+                let bikesOwned = res.body.length;
+                
+                // Check that the number of owned bikes in the bikes collection
+                // is equal to the bikeCount of the relevant garage object
+                request(app)
+                  .get(`/garage/${garageId}`)
+                  .expect((response) => {
+                    expect(bikesOwned).toEqual(response.body.garage.bikeCount);
+                  })
+                  .end((err, response) => {
+                    if (err) {
+                      return done(err);
+                    }
+                    done();
+                  }); //end end()
               })
           })
-          
       });
-      
-    
   });
   
   
-  /*
-   
-   .end((err, res) => {
-            if (err) {
-              return done(err);
-            }
-            done();
-          })
-        
-   
-   
-   Patch the garage in the DB
-   
-   
-      Count all the bikes in the collection with owner id equal to garageid
-      verify that the count is equal to the current bikeCount
-  
-  */
 
-});
+}); // end describe
 
 
 
