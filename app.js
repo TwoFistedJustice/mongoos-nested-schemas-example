@@ -42,6 +42,18 @@ app.get('/garage/:id', (req, res) => {
       if (!garage) {
         return res.status(400).send();
       }
+      /*
+      * This send() syntax with the curly braces in the argument complicates the syntax
+      * it requires you to use an extra 'garage.whatever' when you reference it elsewhere.
+      *
+      * By contrast the GET bikes uses virtually the same code, except
+      * that it lacks the curly braces around the send argument. It is much easier
+      * to reference. You can see both ways in action in the bikeCount test.
+      *
+      * I leave it uncorrected as an example of how NOT to do it. Also, this toy-app
+      * isn't really worth the time it will take to fix it.
+      *
+      * */
       res.send({garage});
     })
     .catch((e) => {
