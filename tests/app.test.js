@@ -426,7 +426,6 @@ describe('PATCH /tools/:garageId', () => {
     if (err) {
       return done(err);
     }
-    
     request(app)
       .patch(`/tools/${garageId}`)
       .send(ricksTool)
@@ -447,10 +446,38 @@ describe('PATCH /tools/:garageId', () => {
 });
 
 
-
-/*
-
 // Patch tool remove from garage by garage id
 describe('PATCH /dropTool/:garageId', () => {
-
-});*/
+  let garageId = twinberryPeaks[0]._id.toHexString();
+  let deleteMe = {toolName: 'Wrench'};
+  
+  it('should remove a tool from the tools list', (done) => {
+    request(app)
+      .get(`/tools/${garageId}`)
+      .expect((res) => {
+        expect(res.body.length).toEqual(2);
+      }).end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      request(app)
+        .patch(`/dropTool/${garageId}`)
+        .send(deleteMe)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.toolChest).toExist();
+          expect(res.body.toolChest.length).toEqual(1);
+          expect(res.body.toolChest[0].toolName).toNotEqual(deleteMe.toolName);
+        })
+        .end((err, res) => {
+          if (err) {
+            return done(e);
+          }
+          done();
+        })
+      
+    });
+  });
+  
+  
+});
