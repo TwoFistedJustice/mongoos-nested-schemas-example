@@ -101,6 +101,26 @@ app.get('/bike/:bikeId', (req, res) => {
 });
 
 
+app.get('/tools/:garageId', (req, res) => {
+  let id = req.params.garageId;
+  if (!ObjectID.isValid(id)) {
+    return res.status(400).send();
+  }
+  
+  Garage.findById(id)
+    .then((garage) => {
+      if (!garage) {
+        res.status(400).send();
+      }
+      res.send(garage.toolChest);
+    })
+    .catch((e) => {
+      res.status(404).send();
+    });
+  
+  
+});
+
 // this route adds a car to the garage, and removes any previously added car
 
 app.patch('/car/:garageId', (req, res) => {
