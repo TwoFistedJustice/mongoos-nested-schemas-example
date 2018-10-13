@@ -8,25 +8,43 @@ const {Car} = require ('../modelCar');
 const {Bike} = require ('../modelBike');
 const {Tool} = require ('../modelTool');
 
-const twinberryPeaks = [
+const toolsArray = [
   {
-    _id: new ObjectID (),
-    name: 'Big Ed\'s Gas Farm',
-    bikeCount: 1
+    _id: new ObjectID(),
+    toolName: 'Wrench'
   },
   {
-    _id: new ObjectID (),
+    _id: new ObjectID(),
+    toolName: 'Hammer'
+  }
+];
+
+
+const twinberryPeaks = [
+  {
+    _id: new ObjectID(),
+    name: 'Big Ed\'s Gas Farm',
+    bikeCount: 1,
+    toolChest: toolsArray
+  },
+  {
+    _id: new ObjectID(),
     name: 'Wally\'s Service Station'
   }
 ];
 
 const badAssHarley = [
   {
-    _id: new ObjectID (),
+    _id: new ObjectID(),
     color: 'polka dots',
     owner: twinberryPeaks[0]._id
   }
 ];
+
+const ricksTool = {
+  _id: ObjectID(),
+  toolName: 'Portal gun'
+};
 
 
 beforeEach ((done) => {
@@ -363,24 +381,59 @@ describe ('DELETE /bike/:bikeId', () => {
                       return done(err);
                     }
                     done();
-                  })
-              })
+                  });
+              });
           });
       });
   });
-  
-  
-  
-  
 });
 
 
+describe('GET ./tools/:garageId', () => {
+  let id = twinberryPeaks[0]._id.toHexString();
+ it('should get all the tools in the tool chest', (done) => {
+   request(app)
+     .get(`/tools/${id}`)
+     .expect(200)
+     .expect((res) => {
+       expect(res.body).toExist();
+       expect(res.body[0].toolName).toEqual(toolsArray[0].toolName);
+       expect(res.body[0]._id).toEqual(toolsArray[0]._id.toHexString());
+       expect(res.body[1].toolName).toEqual(toolsArray[1].toolName);
+       expect(res.body[1]._id).toEqual(toolsArray[1]._id.toHexString());
+     })
+     .end((err, res) => {
+       if (err) {
+         return done(err);
+       }
+     done();
+     });
+ });
+});
 
 /*
+
 // Patch tool add to garage by garage id
 describe('PATCH /tools/:garageId', () => {
+  let garageId = twinberryPeaks[0]._id.toHexString();
 
+  it('should add a tool to the tools list', (done) => {
+  request(app)
+    .get(`/tools/${garageId}`)
+    .expect((res) => {
+      expect(res.body).toExclude(ricksTool);
+    }).end((err, res) => {
+    done();
+    });
+  
+  
+  });
+  
+  
 });
+
+
+
 
 
 // Patch tool remove from garage by garage id
