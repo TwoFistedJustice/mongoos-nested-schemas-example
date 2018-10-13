@@ -88,7 +88,10 @@ Unit tests are built on
  
  You can set the tests to run until you change something by running "npm run test-watch"
  
- These are the first unit tests I've written from scratch. 
+ These are the first unit tests I've written from scratch.
+ 
+ To run multiple server routes in the same test, chain them via the .end() call in expect. 
+ You can access returned data via the 'res' property.
  
  
 
