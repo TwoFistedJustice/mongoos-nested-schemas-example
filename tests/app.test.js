@@ -42,7 +42,7 @@ const badAssHarley = [
 ];
 
 const ricksTool = {
-  _id: ObjectID(),
+  // _id: ObjectID(),
   toolName: 'Portal gun'
 };
 
@@ -411,7 +411,7 @@ describe('GET ./tools/:garageId', () => {
  });
 });
 
-/*
+
 
 // Patch tool add to garage by garage id
 describe('PATCH /tools/:garageId', () => {
@@ -421,20 +421,34 @@ describe('PATCH /tools/:garageId', () => {
   request(app)
     .get(`/tools/${garageId}`)
     .expect((res) => {
-      expect(res.body).toExclude(ricksTool);
+      expect(res.body.length).toEqual(2);
     }).end((err, res) => {
-    done();
+    if (err) {
+      return done(err);
+    }
+    
+    request(app)
+      .patch(`/tools/${garageId}`)
+      .send(ricksTool)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.toolChest).toExist();
+        expect(res.body.toolChest[2].toolName).toEqual(ricksTool.toolName);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(e);
+        }
+        done();
+      })
+    
     });
-  
-  
   });
-  
-  
 });
 
 
 
-
+/*
 
 // Patch tool remove from garage by garage id
 describe('PATCH /dropTool/:garageId', () => {
